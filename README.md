@@ -19,9 +19,3 @@ Extra applications/files needed:-
 ### Screenshots:-
 
 
--------
-
-### Extra Things:-
-Bash PS1:
-`export PS1="\[$(tput bold)\]\[$(tput setaf 1)\](\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h\[$(tput setaf 1)\])─[\[$(tput setaf 7)\]\t\[$(tput setaf 1)\]]─[\[$(tput setaf 7)\]\W\[$(tput setaf 1)\]]$(tput setaf 1)\]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"`
-<br>Place it in your ~/.bashrc
