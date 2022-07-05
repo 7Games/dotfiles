@@ -1,0 +1,150 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+background = #2e3440
+background-alt = #3e4450
+foreground = #ffffff
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+
+
+;================================================================
+;==============================BARS==============================
+;================================================================
+
+[bar/top]
+width = 100%
+height = 20
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+font-0 = "Ubuntu Mono:pixelsize=10;5"
+
+module-margin-right = 1
+
+modules-center = pulseaudio date battery
+
+line-size = 3
+
+wm-restack = i3
+
+cursor-click = pointer
+cursor-scroll = pointer
+
+[bar/bottom]
+width = 100%
+height = 20
+
+bottom = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+font-0 = "Ubuntu Mono:pixelsize=10;1"
+
+modules-center = i3
+
+
+;=====================================================================
+;===============================MODULES===============================
+;=====================================================================
+
+
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+
+pin-workspaces = true
+
+label-mode-padding = 2
+label-mode-foreground = #ffffff
+label-mode-background = ${colors.primary}
+
+label-focused = [ %name% ]
+label-focused-foreground = #ffffff
+label-focused-background = ${colors.background-alt}
+label-focused-padding = 2
+
+label-unfocused = [ %name% ]
+label-unfocused-foreground = #ffffff
+label-unfocused-padding = 2
+
+label-visible = [ %name% ]
+label-visible-foreground = #ffffff
+label-visible-background = ${self.label-focused-background}
+label-visible-padding = ${self.label-focused-padding}
+
+label-urgent = > %name% <
+label-urgent-foreground = #ffffff
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+label-separator = -
+
+
+[module/date]
+type = internal/date
+interval = 5
+
+time = %H:%M
+
+label = - [ %time% ] -
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume = <label-volume>
+label-volume = [ VOL: %percentage%% ]
+label-volume-foreground = ${root.foreground}
+
+label-muted = [ MUT: %percentage%% ]
+
+[module/battery]
+type = internal/battery
+
+full-at = 99
+low-at = 20
+
+battery = BAT0
+adapter = ADP1
+
+poll-interval = 5
+
+format-charging = [ <label-charging> ]
+format-discharging = [ <label-discharging> ]
+format-full = [ <label-full> ]
+format-low = [ <label-low> ]
+
+label-charging = CHR: %percentage%%
+label-discharging = BAT: %percentage%%
+label-full = FUL: %percentage%%
+label-low = LOW: %percentage%%
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+; vim:ft=dosini
