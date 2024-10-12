@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Loop through all files in the current directory
+for input_file in *; do
+    # Check if it's a regular file
+    if [ -f "$input_file" ]; then
+        # Extract the first 8 characters
+        base_name="${input_file:0:8}"
+
+        # Extract everything after the first '-' character
+        suffix="${input_file#*-}"
+
+        # Extract the file extension
+        extension="${input_file##*.}"
+
+        # Construct the new filename
+        if [[ "$suffix" == "$input_file" ]]; then
+            # No '-' found, just use the base name and extension
+            new_file="${base_name}.${extension}"
+        else
+            # Append the suffix and extension
+            new_file="${base_name}-${suffix}"
+        fi
+
+        # Rename the file if the new name is different
+        if [ "$input_file" != "$new_file" ]; then
+            mv "$input_file" "$new_file"
+            echo "Renamed '$input_file' to '$new_file'"
+        fi
+    fi
+done
