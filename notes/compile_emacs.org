@@ -1,0 +1,19 @@
+#+TITLE: Compiling GNU Emacs
+
+Download the GNU Emacs source code and navigate to the directory.
+
+#+begin_src sh
+  $ ./autogen.sh
+#+end_src
+
+#+begin_src sh
+  $ ./configure --with-imagemagick --without-pop --without-mailutils --without-xwidgets --with-tree-sitter --without-harfbuzz --with-pgtk --with-gpm --with-gnutls --with-sound=yes
+#+end_src
+
+#+begin_src sh
+  $ make -j$(nproc)
+#+end_src
+
+#+begin_src sh
+  $ sudo make install -j$(nproc)
+#+end_src
