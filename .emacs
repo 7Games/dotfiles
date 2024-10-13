@@ -2,20 +2,76 @@
 
 (setq warning-minimum-level :emergency)
 
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load-file custom-file)
+;; (setq use-package-compute-statistics t)
 
-(setq backup-directory-alist '(("." . (expand-file-name "backups" user-emacs-directory)))
-      backup-by-copying t)
+(use-package customfile
+  :ensure nil
+  :defer t
+  :init
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (load-file custom-file))
 
-(setq-default tab-width 4
-              c-basic-offset tab-width
-              indent-tabs-mode nil)
+(use-package backup
+  :ensure nil
+  :defer t
+  :custom
+  (make-backup-files nil)
+  (create-lockfiles nil)
+  (backup-by-copying t))
 
-(setq use-short-answers t
-      ring-bell-function 'ignore)
+(use-package annoyances
+  :ensure nil
+  :defer t
+  :hook (after-init . (lambda () (windmove-default-keybindings 'meta)))
+  :custom
+  (use-short-answers t)
+  (ring-bell-function 'ignore))
 
-(setq org-support-shift-select t)
+(use-package org
+  :ensure nil
+  :defer t
+  :custom
+  (org-support-shift-select t))
+
+(use-package startup
+  :ensure nil
+  :defer t
+  :custom
+  (inhibit-startup-screen t)
+  (initial-major-mode 'fundamental-mode)
+  (initial-scratch-message ""))
+
+(defun my/prog-mode ()
+  (hl-line-mode 1)
+  (display-line-numbers-mode 1)
+  (electric-pair-mode 1)
+  (setq-default tab-width 4
+                c-basic-offset tab-width
+                indent-tabs-mode nil))
+
+(defun my/ui ()
+  (fido-vertical-mode 1)
+  (define-key icomplete-fido-mode-map (kbd "TAB") 'icomplete-force-complete)
+  (set-fringe-mode -1)
+  (which-key-mode 1)
+  (pixel-scroll-precision-mode 1)
+  (load-theme 'wombat t))
+
+(use-package before-save
+  :ensure nil
+  :defer t
+  :hook
+  (before-save . whitespace-cleanup))
+
+(use-package ui
+  :ensure nil
+  :defer t
+  :hook (after-init . my/ui))
+
+(use-package prog-mode
+  :ensure nil
+  :defer t
+  :hook (prog-mode . my/prog-mode))
 
 (use-package multiple-cursors
   :ensure t
@@ -28,25 +84,9 @@
   :ensure t
   :defer t)
 
-(setq inhibit-startup-screen t
-      initial-scratch-message (format ";; GNU Emacs %i.%i\n\n" emacs-major-version emacs-minor-version))
-
-(defun my/after-init ()
-  "Things to run `after-init'."
-  (windmove-default-keybindings 'meta)
-  (set-fringe-mode -1)
-  (electric-pair-mode 1)
-  (fido-vertical-mode 1)
-  (define-key icomplete-fido-mode-map (kbd "TAB") 'icomplete-force-complete)
-  (load-theme 'wombat t))
-
-(defun my/prog-mode ()
-  "Things to run in `prog-mode'."
-  (hl-line-mode 1)
-  (display-line-numbers-mode 1))
-
-(add-hook 'before-save-hook 'whitespace-cleanup)
-(add-hook 'after-init-hook  'my/after-init)
-(add-hook 'prog-mode-hook   'my/prog-mode)
+(use-package pdf-tools
+  :ensure t
+  :defer t
+  :init (pdf-loader-install))
 
 ;; End of .emacs
