@@ -38,6 +38,14 @@
   :custom
   (org-support-shift-select t))
 
+(use-package dired
+  :ensure nil
+  :defer t
+  :custom (dired-omit-files "^\\.[a-zA-Z0-9]+")
+  :hook (dired-mode . dired-omit-mode)
+  :bind (:map dired-mode-map ("." . dired-omit-mode))
+  :init (put 'dired-find-alternate-file 'disabled nil))
+
 (use-package startup
   :ensure nil
   :defer t
