@@ -101,6 +101,13 @@
   :ensure t
   :defer t)
 
+(use-package jinx
+  :ensure t
+  :defer t
+  :bind (("M-$" . jinx-correct)
+         ("C-;" . jinx-correct))
+  :hook (org-mode . jinx-mode))
+
 (use-package pdf-tools
   :ensure t
   :defer t
