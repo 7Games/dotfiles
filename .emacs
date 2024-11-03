@@ -24,6 +24,7 @@
   :defer t
   :hook (after-init . (lambda () (windmove-default-keybindings 'meta)))
   :custom
+  (undelete-frame-mode t)
   (use-short-answers t)
   (ring-bell-function 'ignore))
 
