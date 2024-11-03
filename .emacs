@@ -30,6 +30,11 @@
 (use-package org
   :ensure nil
   :defer t
+  :hook (org-babel-after-execute . org-redisplay-inline-images)
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((plantuml . t)))
   :custom
   (org-support-shift-select t))
 
@@ -88,5 +93,12 @@
   :ensure t
   :defer t
   :init (pdf-loader-install))
+
+(use-package plantuml-mode
+  :ensure t
+  :defer t
+  :custom ((plantuml-jar-path "~/.local/bin/plantuml.jar")
+           (org-plantuml-jar-path "~/.local/bin/plantuml.jar")
+           (plantuml-default-exec-mode 'jar)))
 
 ;; End of .emacs
