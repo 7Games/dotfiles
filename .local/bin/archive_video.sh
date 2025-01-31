@@ -1,6 +1,7 @@
 #!/bin/bash
 
-yt-dlp --write-description \
+yt-dlp -f "bestvideo[height<=1080]+bestaudio/best" \
+       --write-description \
        --write-thumbnail \
        --embed-chapters \
        --remux-video "mkv" \
@@ -10,7 +11,7 @@ yt-dlp --write-description \
        --write-info-json \
        --write-comments \
        --restrict-filenames \
-       "$1" \
+       "$@" \
        -o "%(title)s_(%(uploader)s)_[%(id)s]/%(title)s.%(ext)s"
 
 for D in *; do

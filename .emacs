@@ -36,6 +36,7 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((plantuml . t)))
+  (setq org-agenda-files '("~/Documents/School/Tri2/attendance.org"))
   :custom
   (org-support-shift-select t))
 
@@ -68,8 +69,7 @@
   (define-key icomplete-fido-mode-map (kbd "TAB") 'icomplete-force-complete)
   (set-fringe-mode -1)
   (which-key-mode 1)
-  (pixel-scroll-precision-mode 1)
-  (load-theme 'wombat t))
+  (pixel-scroll-precision-mode 1))
 
 (use-package before-save
   :ensure nil
@@ -89,6 +89,7 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
 (package-initialize)
 
 (use-package multiple-cursors
@@ -120,5 +121,21 @@
   :custom ((plantuml-jar-path "~/.local/bin/plantuml.jar")
            (org-plantuml-jar-path "~/.local/bin/plantuml.jar")
            (plantuml-default-exec-mode 'jar)))
+
+(use-package exec-path-from-shell
+  :ensure t
+  :hook (python-mode . eglot-ensure)
+  :init (exec-path-from-shell-initialize))
+
+(use-package company
+  :ensure t
+  :hook ((prog-mode . company-mode)
+         (shell-mode . company-mode)
+         (eshell-mode . company-mode)))
+
+(use-package rust-mode
+  :ensure t
+  :defer t
+  :config (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 
 ;; End of .emacs
