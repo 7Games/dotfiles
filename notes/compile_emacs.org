@@ -7,7 +7,7 @@ Download the GNU Emacs source code and navigate to the directory.
 #+end_src
 
 #+begin_src sh
-  $ ./configure --with-native-compilation --with-gnutls --with-jpeg --with-png --with-rsvg --with-tiff --with-wide-int --with-xft --with-xml2 --with-xpm --without-dbus --with-imagemagick --without-pop --without-tree-sitter --with-pgtk --without-mailutils
+  $ ./configure --with-native-compilation --with-gnutls --with-jpeg --with-png --with-rsvg --with-tiff --with-wide-int --with-xft --with-xml2 --with-xpm --with-dbus --with-imagemagick --without-pop --without-tree-sitter --with-pgtk --with-mailutils
 #+end_src
 
 #+begin_src sh
