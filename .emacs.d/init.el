@@ -4,26 +4,12 @@
 
 ;; (setq use-package-compute-statistics t)
 
-(push '("\\*compilation\\*" . (nil (reusable-frames . t))) display-buffer-alist)
-
 (use-package customfile
   :ensure nil
   :defer t
   :init
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
   (load-file custom-file))
-
-;; Hide startup screen when Emacs opens with a file
-(defun my-inhibit-startup-screen-file ()
-  "Startup screen inhibitor for `command-line-functions`.
-Inhibits startup screen on the first unrecognised option which
-names an existing file."
-  (ignore
-   (setq inhibit-startup-screen
-         (file-exists-p
-          (expand-file-name argi command-line-default-directory)))))
-
-(add-hook 'command-line-functions #'my-inhibit-startup-screen-file)
 
 (use-package backup
   :ensure nil
@@ -36,9 +22,10 @@ names an existing file."
 (use-package annoyances
   :ensure nil
   :defer t
+  :config
+  (push '("\\*compilation\\*" . (nil (reusable-frames . t))) display-buffer-alist)
   :hook (after-init . (lambda () (windmove-default-keybindings 'meta)))
   :custom
-  (undelete-frame-mode t)
   (use-short-answers t)
   (ring-bell-function 'ignore))
 
@@ -49,23 +36,19 @@ names an existing file."
 
 (use-package yasnippet
   :ensure t
+  :defer t
   :hook ((prog-mode
           conf-mode
           snippet-mode) . yas-minor-mode-on)
-  :init
+  :config
   (setq yas-snippet-dir "~/.emacs.d/snippets"))
 
 (use-package org
   :ensure nil
   :defer t
   :hook (org-babel-after-execute . org-redisplay-inline-images)
-  :bind (("C-c a" . org-agenda)
-         ("C-c c" . compile)
-         ("C-c r" . recompile))
+  :bind (("C-c a" . org-agenda))
   :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((plantuml . t)))
   (setq org-agenda-files '("~/Documents/School/Tri2/attendance.org"))
   :custom
   (org-support-shift-select t))
@@ -96,13 +79,13 @@ names an existing file."
   (add-to-list 'default-frame-alist '(height . 37))
   (add-to-list 'default-frame-alist '(width . 80))
   (fido-vertical-mode 1)
+  (setq frame-title-format "GNU Emacs – %b")
   (define-key icomplete-fido-mode-map (kbd "TAB") 'icomplete-force-complete)
   (set-fringe-mode -1)
   (which-key-mode 1)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
-  (load-file "~/.emacs.d/site-lisp/splash-screen.el")
   (pixel-scroll-precision-mode 1))
 
 (use-package ui
@@ -113,6 +96,8 @@ names an existing file."
 (use-package prog-mode
   :ensure nil
   :defer t
+  :bind (("C-c c" . compile)
+         ("C-c r" . recompile))
   :hook (prog-mode . my/prog-mode))
 
 (require 'package)
@@ -143,13 +128,6 @@ names an existing file."
   :defer t
   :init (pdf-loader-install))
 
-(use-package plantuml-mode
-  :ensure t
-  :defer t
-  :custom ((plantuml-jar-path "~/.local/bin/plantuml.jar")
-           (org-plantuml-jar-path "~/.local/bin/plantuml.jar")
-           (plantuml-default-exec-mode 'jar)))
-
 (use-package exec-path-from-shell
   :ensure t
   :hook (python-mode . eglot-ensure)
@@ -170,5 +148,7 @@ names an existing file."
   :ensure nil
   :defer t
   :hook (((c-mode c++-mode rust-mode) . eglot-ensure)))
+
+(load-file "~/.emacs.d/site-lisp/emacs-splash/splash-screen.el")
 
 ;; End of .emacs
