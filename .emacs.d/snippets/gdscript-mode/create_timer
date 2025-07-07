@@ -1,0 +1,4 @@
+# key: timer
+# name: Create timer
+# --
+await get_tree().create_timer(${0:SECONDS}).timeout

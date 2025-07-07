@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: C++ Header Guard
+# key: guard
+# --
+
+#ifndef ${1:FILE_HPP}
+#define $1
+
+$0
+
+#endif /* $1 */

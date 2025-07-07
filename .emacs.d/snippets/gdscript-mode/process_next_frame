@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Process next frame
+# key: processframe
+# --
+await get_tree().process_frame
