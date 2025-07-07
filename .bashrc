@@ -17,7 +17,9 @@ alias ls="ls --color=always -l"
 alias encrypt_file="gpg -c --no-symkey-cache --cipher-algo AES256"
 alias decrypt_file="gpg --no-symkey-cache"
 
-alias play="mpv --ytdl-raw-options=cookies=\"$HOME/.config/mpv/cookies.txt\" --ytdl-format=\"bestvideo[height<=?1080]+bestaudio/best\""
+alias play="mpv --ytdl-raw-options-append=mark-watched= --ytdl-raw-options-append=cookies=\"$HOME/.config/mpv/cookies.txt\" --ytdl-format=\"bestvideo[height<=?1080]+bestaudio/best\""
+
+alias ytdlp="$HOME/.local/bin/yt-dlp"
 
 # Custom scripts/programs directory
 export PATH="$HOME/.local/bin:$PATH"
@@ -25,7 +27,6 @@ export PATH="$HOME/.local/bin:$PATH"
 # idk
 unset HISTFILE
 export XDG_DATA_DIRS="$HOME/.local/share:$XDG_DATA_DIRS"
-. "$HOME/.cargo/env"
 
 # dotnet shit
 export DOTNET_ROOT=$HOME/.dotnet
