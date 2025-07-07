@@ -1,3 +1,0 @@
-[submodule ".emacs.d/site-lisp/emacs-splash"]
-	path = .emacs.d/site-lisp/emacs-splash
-	url = https://github.com/svngms04/emacs-splash
