@@ -1,6 +1,7 @@
 #!/bin/bash
 
-yt-dlp -f "bestvideo[height<=1080]+bestaudio/best" \
+if [ -f "$1" ]; then
+    yt-dlp -f "bestvideo[height<=1080]+bestaudio/best" \
        --write-description \
        --write-thumbnail \
        --embed-chapters \
@@ -8,11 +9,29 @@ yt-dlp -f "bestvideo[height<=1080]+bestaudio/best" \
        --convert-thumbnails "jpg" \
        --embed-subs \
        --write-subs \
-       --write-info-json \
        --write-comments \
+       --no-sponsorblock \
+       --write-info-json \
+       --restrict-filenames \
+       -a "$1" \
+       -o "%(title)s_(%(uploader)s)_[%(id)s]/%(title)s.%(ext)s"
+else
+    yt-dlp -f "bestvideo[height<=1080]+bestaudio/best" \
+       --write-description \
+       --write-thumbnail \
+       --embed-chapters \
+       --remux-video "mkv" \
+       --convert-thumbnails "jpg" \
+       --embed-subs \
+       --write-subs \
+       --write-comments \
+       --no-sponsorblock \
+       --write-info-json \
        --restrict-filenames \
        "$@" \
        -o "%(title)s_(%(uploader)s)_[%(id)s]/%(title)s.%(ext)s"
+fi
+
 
 for D in *; do
     if [ -d "${D}" ]; then
