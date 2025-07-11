@@ -6,7 +6,7 @@
 ;; Setup backups
 (setq make-backup-files nil
       create-lockfiles nil
-      backup-by-copying t)
+      backup-inhibited nil)
 
 ;; Remove some annoyances
 (setq warning-minimum-level :emergency)
@@ -35,6 +35,8 @@
 (defun my/prog-mode ()
   (display-line-numbers-mode 1)
   (electric-pair-mode 1)
+  (setq compilation-scroll-output t)
+  (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
   (setq-default tab-width 4
                 c-basic-offset tab-width
                 indent-tabs-mode nil))
@@ -46,16 +48,28 @@
          ("C-c r" . recompile))
   :hook (prog-mode . my/prog-mode))
 
-;; lsp
-(use-package lsp-ui
-  :pin melpa
+;; Add cmake-mode
+(use-package cmake-mode
   :ensure t
   :defer t)
 
+;; lsp
 (use-package eglot
   :ensure nil
   :defer t
-  :hook (((c-mode c++-mode rust-mode gdscript-mode python-mode) . eglot-ensure)))
+  :custom
+  (lsp-idle-delay 0.1)
+  (fset #'jsonrpc--log-event #'ignore)
+  (setf (plist-get eglot-events-buffer-config :size) 0)
+  (eglot-events-buffer-size 0)
+  (eglot-sync-connect nil)
+  (eglot-connect-timeout nil)
+  (eglot-autoshutdown t)
+  (eglot-send-changes-idle-time 3)
+  (flymake-no-changes-timeout 5)
+  (eldoc-echo-area-use-multiline-p nil)
+  (setq eglot-ignored-server-capabilities '( :documentHighlightProvider))
+  :hook (prog-mode . eglot-ensure))
 
 ;;
 (use-package editorconfig
@@ -101,13 +115,106 @@
          ("C-;" . jinx-correct))
   :hook (org-mode . jinx-mode))
 
-;; Auto complete
-(use-package company
+;; Minibuffer completion
+(use-package marginalia
   :ensure t
-  :defer t
-  :hook ((prog-mode . company-mode)
-         (shell-mode . company-mode)
-         (eshell-mode . company-mode)))
+  :custom
+  (marginalia-align 'right)
+  :init
+  (marginalia-mode 1))
+
+(use-package all-the-icons
+  :ensure t)
+
+(use-package all-the-icons-completion
+  :ensure t
+  :after (marginalia all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init
+  (all-the-icons-completion-mode))
+
+(use-package vertico
+  :ensure t
+  :custom
+  (vertico-count 13)
+  (vertico-resize t)
+  (vertico-cycle nil)
+  :config
+  (advice-add #'vertico--format-candidate :around
+              (lambda (orig cand prefix suffix index _start)
+                (setq cand (funcall orig cand prefix suffix index _start))
+                (concat
+                 (if (= vertico--index index)
+                     (propertize "» " 'face 'vertico-current)
+                   "  ")
+                 cand)))
+  (vertico-mode 1))
+
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+;;;
+(use-package treemacs
+  :ensure t
+  :bind ("C-c f" . treemacs)
+  :config
+  (treemacs-git-mode 'extended)
+  (with-eval-after-load 'treemacs
+    (define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action))
+  (with-eval-after-load 'doom-themes-ext-treemacs
+    (remove-hook 'treemacs-mode-hook #'doom-themes-hide-modeline))
+  (treemacs-indent-guide-mode 1)
+  (treemacs-git-commit-diff-mode 1))
+
+(use-package treemacs-magit
+  :ensure t
+  :after (treemacs magit)
+  :ensure t)
+
+(use-package treemacs-icons-dired
+  :ensure t
+  :hook (dired-mode . treemacs-icons-dired-enable-once)
+  :ensure t)
+
+;; Auto complete
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-auto t)
+  (corfu-cycle t)
+  (corfu-count 14)
+  (corfu-scroll-margin 4)
+  (corfu-auto-delay 0.1)
+  (corfu-auto-prefix 2)
+  (corfu-min-width 80)
+  (corfu-max-width corfu-min-width)
+  (corfu-preview-current 'insert)
+  :hook ((prog-mode . corfu-mode)
+         (shell-mode . corfu-mode)
+         (eshell-mode . corfu-mode)))
+
+(use-package corfu-popupinfo
+  :after corfu
+  :hook (corfu-mode . corfu-popupinfo-mode)
+  :custom
+  (corfu-popupinfo-delay '(0.15 . 0.1))
+  (corfu-popupinfo-hide nil)
+  :config
+  (corfu-popupinfo-mode))
+
+(use-package kind-icon
+  :ensure t
+  :after corfu
+  :custom
+  (kind-icon-use-icons t)
+  (kind-icon-default-face 'corfu-default)
+  (kind-icon-blend-background nil)
+  (kind-icon-blend-frac 0.08)
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 ;; Rust stuff
 (use-package rust-mode
@@ -124,22 +231,50 @@
   (gdscript-godot-executable "/usr/bin/godot")
   (gdscript-docs-local-path "/home/benjamin/Documents/ARCHIVE/godot-docs-html-stable"))
 
-;; Show docstring and keybinds for M-x
-(use-package marginalia
+;; New modeline
+(use-package doom-modeline
   :ensure t
-  :config (marginalia-mode 1))
+  :config
+  (doom-modeline-mode 1))
+
+;; Themes
+(use-package doom-themes
+  :ensure t
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (load-theme 'doom-material-dark t))
+
+;; cool
+(use-package rainbow-delimiters
+  :ensure t)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;; Some random stuff to make emacs look and feel better
-(fido-vertical-mode 1)
-(define-key icomplete-fido-mode-map (kbd "TAB") 'icomplete-force-complete)
 (which-key-mode 1)
 (column-number-mode 1)
 (delete-selection-mode 1)
-(setq frame-title-format "GNU Emacs – %b")
+(setq-default frame-title-format "GNU Emacs – %b")
 (pixel-scroll-precision-mode 1)
+(setq-default context-menu-mode t)
+(setq-default enable-recursive-minibuffers t)
+(setq-default read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      completion-ignore-case t)
+(setq inhibit-splash-screen t
+      inhibit-startup-screen t
+      inhibit-x-resources t
+      frame-resize-pixelwise t)
+(setq-default redisplay-dont-pause t
+  scroll-margin 1
+  scroll-step 1
+  scroll-conservatively 10000
+  scroll-preserve-screen-position 1)
+(setq-default cursor-type 'bar)
+(set-cursor-color "#ffffff")
 
-;; Change theme
-(load-theme 'wombat t nil)
+;; Change font
+(add-to-list 'default-frame-alist `(font . "Iosevka-13"))
 
 ;; Hide the ugly stuff
 (tool-bar-mode -1)
