@@ -1,9 +1,0 @@
-# key: ifndef
-# name: C++ header guard
-# --
-#ifndef ${1:HEADER_NAME}_HPP
-#define ${1}_HPP
-
-$0
-
-#endif // ${1}_HPP
