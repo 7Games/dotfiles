@@ -1,0 +1,40 @@
+#!/usr/bin/env lua
+
+function file_exists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
+end
+
+if #arg < 2 then
+   print(string.format("Usage: %s <file> <command> <command_arguments>...", arg[0]));
+   os.exit(1);
+end
+
+local arg_offset = 1;
+
+local FILE = "";
+local COMMAND = "";
+
+-- Set file
+FILE = arg[arg_offset];
+arg_offset = arg_offset + 1;
+
+-- Construct program and it's arguments
+for i = arg_offset, #arg do
+   COMMAND = COMMAND.." "..arg[i];
+end
+
+-- Read the file
+local file = io.open(FILE, "r")
+
+if file then
+   for line in file:lines() do
+      os.execute(COMMAND.." "..line);
+      print("Executing: "..COMMAND.." "..line);
+   end
+
+   file:close() -- Close the file when you're done
+else
+   print("ERROR: File doesn't exist");
+   os.exit(1);
+end
