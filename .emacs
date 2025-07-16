@@ -7,7 +7,7 @@
 ;;; Code:
 
 ;; Get rid of the custom changes
-(setq custom-file "/dev/null")
+(setq custom-file (make-temp-file "emacs-custom"))
 
 ;; Remove backups
 (setq make-backup-files nil)
@@ -49,6 +49,7 @@
 
 ;; Add melpa
 (require 'package)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable-melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
@@ -105,6 +106,16 @@
   :bind (:map flycheck-mode-map
               ("M-n" . flycheck-next-error)
               ("M-p" . flycheck-previous-error)))
+
+;; Auto completion
+(use-package company
+  :ensure t
+  :defer t
+  :hook ((prog-mode eshell-mode ielm-mode) . company-mode)
+  :custom
+  (company-tooltip-align-annotations 't)
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.1))
 
 ;; Style stuff here so if the config get's messed up I get flashbanged
 
