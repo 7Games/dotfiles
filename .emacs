@@ -1,167 +1,146 @@
-;;; .emacs --- personal config of svngms  -*- lexical-binding: t -*-
+;;; .emacs --- personal config of svngms -*- lexical-binding: t; -*-
 ;;; Commentary:
-;;; This is my personal Emacs config.  It used to be complex but over
-;;; the years I have stripped it down and restarted over and over
-;;; again.  Now I think it's a deceint config that has the bare
-;;; minimum while still being good to use.
 ;;; Code:
 
-;; Get rid of the custom changes
-(setq custom-file (make-temp-file "emacs-custom"))
-
-;; Remove backups
-(setq make-backup-files nil)
-(setq create-lockfiles nil)
-(setq backup-inhibited nil)
-
-;; Remove some annoying stuff
-(setq-default warning-minimum-level :emergency)
-(setq use-short-answers t)
-(setq ring-bell-function 'ignore)
-
-;; Move between windows with meta (alt)
-(windmove-default-keybindings 'meta)
-
-;; Built-in file manager
-(setq-default dired-omit-files "^\\.[a-zA-Z0-9]+")
-(add-hook 'dired-mode-hook 'dired-omit-mode)
-(add-hook 'dired-mode-hook
-      (lambda ()
-    (local-set-key (kbd ".") 'dired-omit-mode)))
-(put 'dired-find-alternate-file 'disabled nil)
-
-;; Stuff for `prog-mode'
-(defun my/prog-mode ()
-  "Custom `prog-mode'."
-  (display-line-numbers-mode 1)
-  (electric-pair-mode 1)
-  (setq-default compilation-scroll-output t)
-  (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
-  (setq-default tab-width 4)
-  (setq-default c-basic-offset tab-width)
-  (setq-default indent-tabs-mode nil))
-
-(add-hook 'prog-mode-hook 'my/prog-mode)
-(global-set-key (kbd "C-c c") 'compile)
-(global-set-key (kbd "C-c r") 'recompile)
-
-;; EXTERNAL PACKAGES
-
-;; Add melpa
-(require 'package)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable-melpa.org/packages/") t)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(setq-default warning-minimum-level :emergency
+              package-archives '(("gnu"   . "http://elpa.gnu.org/packages/")
+                                 ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
-;; Multiple cursors
-(use-package multiple-cursors
-  :ensure t
-  :bind (("C->" . mc/mark-next-like-this)
-     ("C-<" . mc/mark-previous-like-this)
-     ("C-c h" . mc/mark-all-like-this)))
-
-;; Per-project editor configuration
-(use-package editorconfig
-  :ensure t
-  :defer t
-  :hook (prog-mode . editorconfig-mode))
-
-;; Git client
-(use-package magit
-  :ensure t
-  :defer t)
-
-;; Spell checker
-(use-package jinx
-  :ensure t
-  :bind (("M-$" . jinx-correct)
-     ("C-;" . jinx-correct))
-  :hook (org-mode . jinx-mode))
-
-;; Better modeline
-(use-package doom-modeline
-  :ensure t
-  :config (doom-modeline-mode 1))
-
-;; YAML
-(use-package yaml-mode
-  :ensure t
-  :defer t
-  :mode ("\\.yml$|\\.yaml$" . yaml-mode))
-
-;; Rust
 (use-package rustic
   :ensure t
   :defer t
-  :mode ("\\.rs$" . rustic-mode)
   :custom
-  (rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
-  (rustic-lsp-client 'eglot))
+  (rustic-format-on-save nil)
+  (rustic-cargo-use-last-stored-arguments t)
+  (rustic-rust-client 'eglot))
 
-;; Flycheck, shows errors in the file
-(use-package flycheck
+(use-package lua-mode
   :ensure t
   :defer t
+  :custom
+  (lua-indent-level 4))
+
+(use-package gdscript-mode
+  :ensure t
+  :defer t)
+
+(use-package eglot
+  :defer t
+  :hook (prog-mode . eglot-ensure))
+
+(use-package flycheck
+  :ensure t
   :hook (prog-mode . flycheck-mode)
   :bind (:map flycheck-mode-map
               ("M-n" . flycheck-next-error)
               ("M-p" . flycheck-previous-error)))
 
-;; Auto completion
 (use-package company
   :ensure t
   :defer t
-  :hook ((prog-mode eshell-mode ielm-mode) . company-mode)
+  :hook ((prog-mode eshell-mode ielm-mode) . company-mode))
+
+(use-package multiple-cursors
+  :ensure t
+  :defer t
+  :bind
+  ("C->" . mc/mark-next-like-this)
+  ("C-<" . mc/mark-previous-like-this)
+  ("C-c h" . mc/mark-all-like-this))
+
+(use-package magit
+  :ensure t
+  :defer t)
+
+;; Uses `libenchant2'
+(use-package jinx
+  :ensure t
+  :defer t
+  :bind
+  ("M-$" . jinx-correct)
+  ("C-;" . jinx-correct)
+  :hook
+  (org-mode . jinx-mode))
+
+;; Syntax highlighting for exported code blocks
+(use-package ox-latex
+  :defer t
+  :after org
   :custom
-  (company-tooltip-align-annotations 't)
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.1))
+  (org-latex-listings 'minted)
+  (org-latex-packages-alist '(("" "minted")))
+  (org-latex-pdf-process
+   '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")))
 
-;; Style stuff here so if the config get's messed up I get flashbanged
+(use-package org
+  :ensure nil
+  :custom
+  (org-support-shift-select t))
 
-;; Use better built-in completion system
-(fido-vertical-mode 1)
-(define-key icomplete-fido-mode-map (kbd "TAB") 'icomplete-force-complete)
+(use-package editorconfig
+  :init
+  (editorconfig-mode 1))
 
-;; I use speed bar for project navigation
-(global-set-key (kbd "C-c f") 'speedbar)
+(use-package prog-mode
+  :hook
+  (prog-mode . display-line-numbers-mode)
+  (prog-mode . electric-pair-mode)
+  :custom
+  (tab-width 4)
+  (c-basic-offset tab-width)
+  (indent-tabs-mode nil)
+  :bind
+  ("C-c c" . compile)
+  ("C-c r" . recompile))
 
-;; Remove ugly ui
+(use-package dired
+  :hook
+  (dired-mode-hook . dired-omit-mode)
+  :bind
+  (:map dired-mode-map
+        ("." . dired-omit-mode))
+  :init
+  (put 'dired-find-alternate-file 'disabled nil)
+  :custom
+  (dired-omit-files "^\\.[a-zA-Z0-9]+"))
+
+(use-package completion
+  :init
+  (fido-vertical-mode 1)
+  :bind
+  (:map icomplete-fido-mode-map
+        ("TAB" . icomplete-force-complete))
+  :custom
+  (read-file-name-completion-ignore-case t)
+  (read-buffer-completion-ignore-case t)
+  (completion-ignore-case t))
+
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
-(fringe-mode -1)
-
-;; Stop showing me this stuff!
-(setq inhibit-splash-screen t)
-(setq inhibit-startup-screen t)
-
-;; Window style
-(setq-default frame-title-format "GNU Emacs – %b")
-(setq-default cursor-type 'bar)
-(setq-default frame-resize-pixelwise t)
-
-;; Random stuff I can't categorise
 (which-key-mode 1)
 (column-number-mode 1)
 (delete-selection-mode 1)
-(context-menu-mode t)
 
-;; Change font
-(add-to-list 'default-frame-alist `(font . "Iosevka-13"))
+(setq inhibit-splash-screen t
+      inhibit-startup-screen t
+      initial-scratch-message (format ";; GNU Emacs %i.%i\n\n"
+                                      emacs-major-version
+                                      emacs-minor-version)
+      use-short-answers t
+      ring-bell-function 'ignore
+      backup-directory-alist '(("." . "~/.emacs.d/backups")))
 
-;; Some better scrolling
-(setq scroll-conservatively 10000)
-(pixel-scroll-precision-mode 1)
+(windmove-default-keybindings 'meta)
 
-;; Clean-up the whitespace before saving
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
-;; Change theme
-(load-theme 'wombat t nil)
+(load-theme 'wombat t)
 
-;; And finally add the LSP
-(add-hook 'prog-mode-hook 'eglot-ensure)
-
-(provide '.emacs)
 ;;; .emacs ends here
