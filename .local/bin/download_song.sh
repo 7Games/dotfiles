@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# to_image.sh - download a song from the internet
+# Created by svngms 2024-2025
+# This script is under the UNLICENSE (https://unlicense.org/)
+
+if [ ! "$#" = 1 ]; then
+    echo "usage: to_image.sh [URL]"
+    echo "Turn YouTube videos into mp3 files"
+    exit -1
+fi
+
 yt-dlp -x \
     --audio-format mp3 \
     -f "bestaudio" \
