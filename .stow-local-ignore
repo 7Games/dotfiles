@@ -1,5 +1,7 @@
 # Comments and blank lines are allowed.
 
+DONTINCLUDE
+
 RCS
 .+,v
 
@@ -21,6 +23,7 @@ _darcs
 \.stow-local-ignore        # stow ignore config
 
 ^/notes
+^/fun
 
 ^/README.*
 ^/LICENSE.*
