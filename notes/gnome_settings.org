@@ -1,0 +1,47 @@
+#+TITLE: Gnome settings
+
+I use Gnome as my desktop environment. Here are my settings to make it
+actually usable.
+
+* Themes
+
+ * Adwaita light/dark theme for gtk3 (https://github.com/lassekongo83/adw-gtk3)
+
+* Tweaks
+
+** Keyboard
+
+ * Swap Ctrl and Caps Lock - ON
+
+** Windows
+
+ * Maximise - ON
+ * Minimise - ON
+ * Placement - Right
+ * Centre New Windows - ON
+ * Resize with Secondary-Click - ON
+
+* Settings
+
+** Mouse & Touchpad
+
+ * Corner Push - ON
+ * Disable Touchpad While Typing - OFF
+ * Tap to Click - OFF
+ * Traditional Scroll Direction - ON
+
+** Keyboard
+
+*** Custom shortcuts
+
+ * Launch Emacs - Super+E - *emacs*
+ * Launch terminal - Super+Return - *gnome-terminal*
+
+* Extensions
+
+ * Appindicator and KStatusNotifierItem Support
+ * Blur my Shell
+ * Caffeine
+ * GSConnect
+ * Just Perfection
+ * Logo Menu

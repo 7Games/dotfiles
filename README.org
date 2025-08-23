@@ -1,0 +1,31 @@
+#+TITLE: dotfiles
+
+* How to Install
+
+** Needed programs
+
+ * Git
+ * GNU Stow
+
+** Steps
+
+Clone the repository
+
+#+begin_src bash
+  $ git clone https://codeberg.org/svngms/dotfiles ~/.dotfiles
+#+end_src
+
+use `GNU Stow` to install the config
+
+#+begin_src bash
+  $ cd ~/.dotfiles && stow .
+#+end_src
+
+* Licenses
+
+Basically everything here is under the [[https://unlicense.org/][unlicense]] unless it said
+otherwise. These is just config files, no need for a complicated
+license.
+
+`ytdlp_nest_comments.py` was created originally by pukkandan and
+modified by me.  It is under the [[https://opensource.org/licenses/MIT][MIT license]].
