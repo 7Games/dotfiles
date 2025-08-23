@@ -1,9 +1,32 @@
-# Just set some programs
-export EDITOR="emacs -nw"
+# .bashrc -- personal config of svngms
+
+# Set some programs
+export EDITOR="emacs \
+       -nw \
+       -Q \
+       -f column-number-mode \
+       -f menu-bar-mode \
+       --eval=\"(setq use-short-answers t \
+                      make-backup-files nil \
+                      create-lockfiles  nil \
+                      backup-inhibited  nil)\""
 export PAGER="less"
 
 # Custom prompt
-export PS1="\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "
+function ps1_exit {
+    local e=$?
+    if [[ e -ne 0 ]]; then
+        printf "─[\e[31m%s\e[0m]" "$e"
+    fi
+}
+
+ps1_save() {
+    EXIT_CODE=$(ps1_exit)
+    TIME="$(date "+%H:%M:%S")"
+}
+PROMPT_COMMAND=ps1_save
+
+export PS1='\n┌[${TIME}]─[\w]${EXIT_CODE}\n└\$ '
 
 # Some safty features
 alias rm="rm -Id"
@@ -14,24 +37,27 @@ alias cp="cp -i"
 alias e="$EDITOR"
 alias ls="ls --color=always -l"
 
-alias encrypt_file="gpg -c --no-symkey-cache --cipher-algo AES256"
-alias decrypt_file="gpg --no-symkey-cache"
+alias play="mpv --config-dir=$HOME/.config/mpv/yt"
 
-alias play="mpv --ytdl-raw-options-append=mark-watched= --ytdl-raw-options-append=cookies=\"$HOME/.config/mpv/cookies.txt\" --ytdl-format=\"bestvideo[height<=?1080]+bestaudio/best\""
+# Change the path
+export PATH="$HOME/.local/bin:$PATH" # Scripts
+export PATH="$HOME/.cargo/bin:$PATH" # Rust
 
-alias ytdlp="$HOME/.local/bin/yt-dlp"
-
-# Custom scripts/programs directory
-export PATH="$HOME/.local/bin:$PATH"
-
-# idk
-unset HISTFILE
+# I forgot what this is but I'm not removing it for fear of breaking something
 export XDG_DATA_DIRS="$HOME/.local/share:$XDG_DATA_DIRS"
 
-# dotnet shit
-export DOTNET_ROOT=$HOME/.dotnet
-export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
-export ANDROID_HOME=$HOME/.MAUI/Android
-export JAVA_HOME=$HOME/.MAUI/jdk
-export ANDROID_SDK_HOME=$HOME/.MAUI
-export PATH=$PATH:$ANDROID_HOME/cmdline-tools/11.0/bin
+# Display some fun stuff at start up
+
+# Miku's birthday!
+if [[ $(date +%m-%d) == "08-31" ]]; then
+    echo -e "\e[94m\e[1m\e[4mHAPPY BIRTHDAY MIKU!!!\e[0m"
+    echo -e "
+   \e[5m\e[93m☆☆☆☆☆☆☆☆☆\e[0m
+  ╭┻┻┻┻┻┻┻┻┻╮
+  ┃╱╲╱╲╱╲╱╲╱┃
+ ╭┻━━━━━━━━━┻╮
+ ┃╱╲╱╲╱╲╱╲╱╲╱┃
+ ┗━━━━━━━━━━━┛"
+else
+    fortune | cowsay -f ~/.dotfiles/fun/miku.cow -W 100 | lolcat
+fi
