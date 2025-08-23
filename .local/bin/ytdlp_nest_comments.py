@@ -202,7 +202,6 @@ def wrap_html(comment_data, video_data, top_level=True):
         '''
         meta = '<meta charset="UTF-8">'
         video_data = ""
-        # video_data += '<img style="width: 50em;" src="file:///run/user/1000/doc/778c3c5f/Z-Waif_-_Give_your_AI_Waifu_tasks_and_gaming_input.jpg" />'
         video_data += f'<h2><a href="https://youtu.be/{video_id}">{title}</a></h2>'
         video_data += f'<h3>by <a href="https://youtube.com/channel/{uploader_id}">{uploader}</a></h3>'
         video_data += f'<p>Uploaded <strong>{timestamp}</strong></p>'
