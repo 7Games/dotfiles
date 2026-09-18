@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # archive_video.sh - a simple video archiving tool
-# Created by svngms 2024-2025
+# Created by svngms 2024-2026
 # This script is under the UNLICENSE (https://unlicense.org/)
 
 if [ "$#" -lt 1 ]; then
@@ -9,14 +9,18 @@ if [ "$#" -lt 1 ]; then
     echo "Archive YouTube videos in a sane format"
     echo
     echo -e " -i\tRe-download info file/comments"
+    echo -e " -t\tDownload with upload date in folder name"
     exit -1
 fi
 
 yt_dlp_args=(
     --write-comments
-    --print-to-file "after_filter:%(comments)j" "%(title)s_(%(uploader)s)_[%(id)s]/%(title)s.comments.json"
     --parse-meta "video::(?P<comments>)"
     -f "bestvideo[height<=1080]+bestaudio/best"
+    --prefer-free-formats
+    #    --cookies "~/.cookies.txt"
+    --js-runtimes node
+    --cookies-from-browser firefox
     --write-description
     --write-thumbnail
     --convert-thumbnails "jpg"
@@ -28,16 +32,28 @@ yt_dlp_args=(
 if [ "$1" == "-i" ]; then
     echo "[ARCVID] Downloading data..."
     yt-dlp "${yt_dlp_args[@]}" \
-     --skip-download \
-     "$2"
+       --skip-download \
+       --print-to-file "after_filter:%(comments)j" "%(title)s_(%(uploader)s)_[%(id)s]/%(title)s.comments.json" \
+       "$2"
+elif [ "$1" == "-t" ]; then
+    echo "[ARCVID] Downloading video (with time)..."
+    yt-dlp "${yt_dlp_args[@]}" \
+       --embed-chapters \
+       --remux-video "mkv" \
+       --embed-subs \
+       --write-subs \
+       "$2" \
+       -o "%(upload_date)s_%(title)s_(%(uploader)s)_[%(id)s]/%(title)s.%(ext)s" \
+           --print-to-file "after_filter:%(comments)j" "%(upload_date)s_%(title)s_(%(uploader)s)_[%(id)s]/%(title)s.comments.json"
 else
     echo "[ARCVID] Downloading video and data..."
     yt-dlp "${yt_dlp_args[@]}" \
-     --embed-chapters \
-     --remux-video "mkv" \
-     --embed-subs \
-     --write-subs \
-     "$1"
+       --embed-chapters \
+       --remux-video "mkv" \
+       --embed-subs \
+       --write-subs \
+       --print-to-file "after_filter:%(comments)j" "%(title)s_(%(uploader)s)_[%(id)s]/%(title)s.comments.json" \
+       "$1"
 fi
 
 echo "[ARCVID] Finished downloading video!"

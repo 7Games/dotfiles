@@ -14,6 +14,8 @@ yt-dlp -x \
     --audio-format mp3 \
     -f "bestaudio" \
     --embed-thumbnail \
+    --js-runtimes node \
+    --cookies-from-browser firefox \
     --convert-thumbnail jpg \
     --exec-before-download "ffmpeg -i %(thumbnails.-1.filepath)q -vf crop=\"'if(gt(ih,iw),iw,ih)':'if(gt(iw,ih),ih,iw)'\" _%(thumbnails.-1.filepath)q" \
     --exec-before-download "rm %(thumbnails.-1.filepath)q" \

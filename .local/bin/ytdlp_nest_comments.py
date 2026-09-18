@@ -6,9 +6,6 @@ https://gist.github.com/pukkandan/ee737fec64822f2552caf3ca4cbf5db7
 which included this license and copyright information:
 "SPDX-License-Identifier: MIT https://opensource.org/licenses/MIT
 Copyright © 2021 pukkandan.ytdlp@gmail.com"
-
-Convert YouTube comments from an info.json file (acquired via
-`yt-dlp --write-comments`) to HTML.
 """
 
 import os.path
@@ -196,6 +193,9 @@ def wrap_html(comment_data, video_data, top_level=True):
                 }
                 .comment-box {
                     border-color: #444;
+                }
+                a {
+                    color: white;
                 }
             }
         </style>
