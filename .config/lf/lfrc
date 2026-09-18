@@ -1,0 +1,13 @@
+set previewer ~/.config/lf/previewer
+
+map <delete> :delete
+
+map xf !clear; find . -type f | wc -l
+
+map xr !randomize_name.sh
+
+map xpjp !clear; toimage jpg png; toimage jpeg png; rm ./*.jpg; rm ./*.jpeg
+map xpwp !clear; toimage webp png; rm ./*.webp
+map xppj !clear; toimage png jpg; rm ./*.png
+
+map xvm4 !clear; tovideo webm mp4; rm ./*.webm
