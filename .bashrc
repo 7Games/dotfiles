@@ -1,15 +1,7 @@
 # .bashrc -- personal config of svngms
 
 # Set some programs
-export EDITOR="emacs \
-       -nw \
-       -Q \
-       -f column-number-mode \
-       -f menu-bar-mode \
-       --eval=\"(setq use-short-answers t \
-                      make-backup-files nil \
-                      create-lockfiles  nil \
-                      backup-inhibited  nil)\""
+export EDITOR="emacs -nw"
 export PAGER="less"
 
 # Custom prompt
