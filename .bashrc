@@ -53,6 +53,7 @@ alias play="mpv --config-dir=$HOME/.config/mpv/yt"
 # Change the path
 export PATH="$HOME/.local/bin:$PATH" # Scripts
 export PATH="$HOME/.cargo/bin:$PATH" # Rust
+export PATH="$HOME/.go/bin:$PATH"    # Go
 
 # I forgot what this is but I'm not removing it for fear of breaking something
 export XDG_DATA_DIRS="$HOME/.local/share:$XDG_DATA_DIRS"
