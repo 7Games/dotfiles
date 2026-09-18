@@ -46,9 +46,7 @@ alias cp="cp -i"
 
 # Shortcuts
 alias e="$EDITOR"
-alias ls="ls --color=always -l"
-
-alias play="mpv --config-dir=$HOME/.config/mpv/yt"
+alias ls="eza -1l --colour=always --icons --git"
 
 # Change the path
 export PATH="$HOME/.local/bin:$PATH" # Scripts
