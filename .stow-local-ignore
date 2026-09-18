@@ -24,6 +24,7 @@ _darcs
 
 ^/notes
 ^/fun
+^/\.stfolder
 
 ^/README.*
 ^/LICENSE.*
