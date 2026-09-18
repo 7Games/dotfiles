@@ -5,20 +5,39 @@ export EDITOR="emacs -nw"
 export PAGER="less"
 
 # Custom prompt
-function ps1_exit {
+function prompt_errno {
     local e=$?
     if [[ e -ne 0 ]]; then
         printf "─[\e[31m%s\e[0m]" "$e"
     fi
 }
 
-ps1_save() {
-    EXIT_CODE=$(ps1_exit)
-    TIME="$(date "+%H:%M:%S")"
+function prompt_git {
+    local branch="$(git rev-parse --abbrev-ref HEAD 2> /dev/null)"
+    local num_of_changes="$(git status -s 2> /dev/null | wc -l)"
+    if [[ -n $branch ]]; then
+        printf "─["
+        if [[ $num_of_changes > 0 ]]; then
+            printf "\e[31m"
+        else
+            printf "\e[32m"
+        fi
+        printf "%s" "$branch"
+        if [[ $num_of_changes > 0 ]]; then
+            printf ":%s" "$num_of_changes"
+        fi
+        printf "\e[0m]"
+    fi
 }
-PROMPT_COMMAND=ps1_save
 
-export PS1='\n┌[${TIME}]─[\w]${EXIT_CODE}\n└\$ '
+construct_prompt() {
+    EXIT_CODE="$(prompt_errno)"
+    TIME="$(date "+%H:%M:%S")"
+    GIT_BRANCH="$(prompt_git)"
+}
+PROMPT_COMMAND=construct_prompt
+
+export PS1='\n┌[${TIME}]─[\w]${GIT_BRANCH}${EXIT_CODE}\n└\$ '
 
 # Some safty features
 alias rm="rm -Id"
