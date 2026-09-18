@@ -53,6 +53,10 @@ export PATH="$HOME/.local/bin:$PATH" # Scripts
 export PATH="$HOME/.cargo/bin:$PATH" # Rust
 export PATH="$HOME/.go/bin:$PATH"    # Go
 
+# Funny character shit
+bind '"\C-^": "|"'
+bind '"\e[1;5u": "\\"'
+
 # I forgot what this is but I'm not removing it for fear of breaking something
 export XDG_DATA_DIRS="$HOME/.local/share:$XDG_DATA_DIRS"
 
