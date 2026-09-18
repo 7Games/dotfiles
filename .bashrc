@@ -59,19 +59,3 @@ bind '"\e[1;5u": "\\"'
 
 # I forgot what this is but I'm not removing it for fear of breaking something
 export XDG_DATA_DIRS="$HOME/.local/share:$XDG_DATA_DIRS"
-
-# Display some fun stuff at start up
-
-# Miku's birthday!
-if [[ $(date +%m-%d) == "08-31" ]]; then
-    echo -e "\e[94m\e[1m\e[4mHAPPY BIRTHDAY MIKU!!!\e[0m"
-    echo -e "
-   \e[5m\e[93m☆☆☆☆☆☆☆☆☆\e[0m
-  ╭┻┻┻┻┻┻┻┻┻╮
-  ┃╱╲╱╲╱╲╱╲╱┃
- ╭┻━━━━━━━━━┻╮
- ┃╱╲╱╲╱╲╱╲╱╲╱┃
- ┗━━━━━━━━━━━┛"
-else
-    fortune | cowsay -f ~/.dotfiles/fun/miku.cow -W 100 | lolcat
-fi
