@@ -1,0 +1,22 @@
+match https?://[^ ]*
+do xdg-open $0
+
+#Images
+match .*\.jpg$
+do imv -f "$0"
+
+match .*\.jpeg$
+do imv -f "$0"
+
+match .*\.png$
+do imv -f "$0"
+
+match .*\.gif$
+do imv -f "$0"
+
+# Videos
+match .*\.mp4$
+do mpv "$0"
+
+match .*\.mkv$
+do mpv "$0"

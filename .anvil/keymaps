@@ -1,0 +1,7 @@
+keymap base update
+
+map C-A move-to-sol
+map C-E move-to-eol
+
+map A-W copy
+map C-Y paste

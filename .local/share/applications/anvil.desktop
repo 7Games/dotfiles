@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Anvil
+Comment=Emulator
+Exec=anvil
+Icon=anvil
+Terminal=false
+Type=Application

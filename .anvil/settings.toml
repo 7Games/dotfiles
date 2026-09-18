@@ -1,0 +1,8 @@
+[general]
+exec = [
+    "Tab '    '"
+]
+
+[alias]
+make="make -j10"
+cloc=">cloc --force-lang=$1 -"
