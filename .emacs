@@ -126,6 +126,7 @@
 (set-face-attribute 'fringe nil :background "#242424" :foreground "red")
 
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 (menu-bar-mode -1)
 (column-number-mode 1)
 
