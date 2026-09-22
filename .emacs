@@ -106,6 +106,7 @@
 ;; compilation
 (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
 (setq compilation-scroll-output t)
+(setq-default compilation-scroll-output t)
 
 ;; prog-mode
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
