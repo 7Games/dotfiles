@@ -2,8 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(setq custom-file "~/.emacs.custom.el")
-
 ;; no warnings
 (setq-default warning-minimum-level :emergency)
 
@@ -156,4 +154,5 @@
 (bind-key "C-c t" 'svn//transparent-background)
 (bind-key "M-z" 'zap-up-to-char)
 
-(load custom-file :no-error-if-file-is-missing)
+;; custom stuff emacs keeps putting here
+(put 'dired-find-alternate-file 'disabled nil)
