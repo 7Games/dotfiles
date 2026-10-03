@@ -17,9 +17,9 @@
 (package-initialize)
 
 (setq package-archives '(("gnu"          . "http://elpa.gnu.org/packages/")
-                         ("nongnu"       . "https://elpa.nongnu.org/nongnu/")
-                         ("melpa"        . "https://melpa.org/packages/")
-                         ("melpa-stable" . "https://stable.melpa.org/packages/")))
+			 ("nongnu"       . "https://elpa.nongnu.org/nongnu/")
+			 ("melpa"        . "https://melpa.org/packages/")
+			 ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
 (unless (package-installed-p 'use-package)
   (unless package-archive-contents
@@ -31,8 +31,8 @@
   :ensure t
   :defer t
   :bind ("C->" . mc/mark-next-like-this)
-        ("C-<" . mc/mark-previous-like-this)
-        ("C-c h" . mc/mark-all-like-this))
+  ("C-<" . mc/mark-previous-like-this)
+  ("C-c h" . mc/mark-all-like-this))
 
 ;; cmake
 (use-package cmake-mode
@@ -76,15 +76,15 @@
   :hook (prog-mode . hl-todo-mode)
   :config
   (setq hl-todo-highlight-punctuation ":"
-        hl-todo-keyword-faces
-        '(("TODO" warning bold)
-          ("FIXME" error bold)
-          ("HACK" font-lock-constant-face bold)
-          ("REVIEW" font-lock-keyword-face bold)
-          ("DESC" custom-variable-obsolete bold)
-          ("URL" custom-variable-obsolete bold)
-          ("NOTE" success bold)
-          ("DEPRECATED" font-lock-doc-face bold))))
+	hl-todo-keyword-faces
+	'(("TODO" warning bold)
+	  ("FIXME" error bold)
+	  ("HACK" font-lock-constant-face bold)
+	  ("REVIEW" font-lock-keyword-face bold)
+	  ("DESC" custom-variable-obsolete bold)
+	  ("URL" custom-variable-obsolete bold)
+	  ("NOTE" success bold)
+	  ("DEPRECATED" font-lock-doc-face bold))))
 
 ;; eglot
 (use-package eglot
@@ -107,35 +107,18 @@
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-ignored-server-capabilities :documentRangeFormattingProvider))
 
-(with-eval-after-load 'rustic
-  ;; 1. Prevent rustic from setting up LSP formatting wrappers
-  (setq rustic-lsp-setup-p nil)
-  (setq rustic-format-on-save nil)
-
-  ;; 2. Nuclear override: Force rustic-mode to use Emacs' native indent command
-  ;; This strips rustic's custom LSP tab alignment function entirely
-  (define-key rustic-mode-map (kbd "TAB") #'indent-for-tab-command)
-  (define-key rustic-mode-map [remap indent-for-tab-command] #'indent-region)
-
-  ;; 3. Point the lower-level indent functions directly to the native rust-mode
-  (add-hook 'rustic-mode-hook
-            (lambda ()
-              (setq-local indent-line-function #'rust-mode-indent-line)
-              (setq-local indent-region-function #'rust-indent-region))))
-
-
 ;; eshell
 (setq eshell-prompt-function
-          (lambda ()
-            (concat
-             (propertize (if (= (user-uid) 0) "[#]" "[$]") 'face `(:foreground "white"))
-             (propertize (concat (replace-regexp-in-string (getenv "HOME") "~" (eshell/pwd)) " ") 'face `(:foreground "white")))))
+      (lambda ()
+	(concat
+	 (propertize (if (= (user-uid) 0) "[#]" "[$]") 'face `(:foreground "white"))
+	 (propertize (concat (replace-regexp-in-string (getenv "HOME") "~" (eshell/pwd)) " ") 'face `(:foreground "white")))))
 ;; based off https://github.com/howardabrams/dot-files/blob/master/emacs-eshell.org#aliases
 (add-hook 'eshell-mode-hook (lambda ()
-    (eshell/alias "e" "find-file $1")
-    (eshell/alias "ee" "find-file-other-window $1")
-    (eshell/alias "emacs" "find-file $1")
-    (eshell/alias "d" "dired $1")))
+			      (eshell/alias "e" "find-file $1")
+			      (eshell/alias "ee" "find-file-other-window $1")
+			      (eshell/alias "emacs" "find-file $1")
+			      (eshell/alias "d" "dired $1")))
 
 ;; imood.el
 (load-file "~/.emacs.d/site-lisp/imood.el")
@@ -204,7 +187,7 @@
 (column-number-mode 1)
 
 (setq-default frame-title-format "GNU Emacs – %b"
-              cursor-type 'bar)
+	      cursor-type 'bar)
 
 (setq scroll-step 1
       scroll-conservatively 101
@@ -250,8 +233,8 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(ada-mode all-the-icons-dired cmake-mode company elsqlite forth-mode
-              hl-todo jinx lsp-mode lua-mode magit minimal-dashboard
-              multiple-cursors rainbow-delimiters vertico yaml)))
+	      hl-todo jinx lsp-mode lua-mode magit minimal-dashboard
+	      multiple-cursors rainbow-delimiters vertico yaml)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
