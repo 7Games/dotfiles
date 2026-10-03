@@ -119,6 +119,10 @@
 (bind-key "C-c c" 'compile)
 (bind-key "C-c r" 'recompile)
 
+;; imood
+(load "~/.emacs.d/site-lisp/imood.el")
+(load "~/.emacs.d/secrets.el")
+
 ;; style
 (set-frame-font "Iosevka Comfy 13")
 (load-theme 'wombat t)
