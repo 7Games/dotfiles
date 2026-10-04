@@ -17,9 +17,9 @@
 (package-initialize)
 
 (setq package-archives '(("gnu"          . "http://elpa.gnu.org/packages/")
-			 ("nongnu"       . "https://elpa.nongnu.org/nongnu/")
-			 ("melpa"        . "https://melpa.org/packages/")
-			 ("melpa-stable" . "https://stable.melpa.org/packages/")))
+                         ("nongnu"       . "https://elpa.nongnu.org/nongnu/")
+                         ("melpa"        . "https://melpa.org/packages/")
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
 (unless (package-installed-p 'use-package)
   (unless package-archive-contents
@@ -76,15 +76,15 @@
   :hook (prog-mode . hl-todo-mode)
   :config
   (setq hl-todo-highlight-punctuation ":"
-	hl-todo-keyword-faces
-	'(("TODO" warning bold)
-	  ("FIXME" error bold)
-	  ("HACK" font-lock-constant-face bold)
-	  ("REVIEW" font-lock-keyword-face bold)
-	  ("DESC" custom-variable-obsolete bold)
-	  ("URL" custom-variable-obsolete bold)
-	  ("NOTE" success bold)
-	  ("DEPRECATED" font-lock-doc-face bold))))
+        hl-todo-keyword-faces
+        '(("TODO" warning bold)
+          ("FIXME" error bold)
+          ("HACK" font-lock-constant-face bold)
+          ("REVIEW" font-lock-keyword-face bold)
+          ("DESC" custom-variable-obsolete bold)
+          ("URL" custom-variable-obsolete bold)
+          ("NOTE" success bold)
+          ("DEPRECATED" font-lock-doc-face bold))))
 
 ;; eglot
 (use-package eglot
@@ -110,15 +110,15 @@
 ;; eshell
 (setq eshell-prompt-function
       (lambda ()
-	(concat
-	 (propertize (if (= (user-uid) 0) "[#]" "[$]") 'face `(:foreground "white"))
-	 (propertize (concat (replace-regexp-in-string (getenv "HOME") "~" (eshell/pwd)) " ") 'face `(:foreground "white")))))
+        (concat
+         (propertize (if (= (user-uid) 0) "[#]" "[$]") 'face `(:foreground "white"))
+         (propertize (concat (replace-regexp-in-string (getenv "HOME") "~" (eshell/pwd)) " ") 'face `(:foreground "white")))))
 ;; based off https://github.com/howardabrams/dot-files/blob/master/emacs-eshell.org#aliases
 (add-hook 'eshell-mode-hook (lambda ()
-			      (eshell/alias "e" "find-file $1")
-			      (eshell/alias "ee" "find-file-other-window $1")
-			      (eshell/alias "emacs" "find-file $1")
-			      (eshell/alias "d" "dired $1")))
+                              (eshell/alias "e" "find-file $1")
+                              (eshell/alias "ee" "find-file-other-window $1")
+                              (eshell/alias "emacs" "find-file $1")
+                              (eshell/alias "d" "dired $1")))
 
 ;; imood.el
 (load-file "~/.emacs.d/site-lisp/imood.el")
@@ -158,6 +158,10 @@
 ;; prog-mode
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'electric-pair-mode)
+(add-hook 'prog-mode-hook (lambda ()
+                            (setq tab-width 4
+                                  c-basic-offset tab-width
+                                  indent-tabs-mode nil)))
 
 (setq tab-width 4
       c-basic-offset tab-width
@@ -187,7 +191,7 @@
 (column-number-mode 1)
 
 (setq-default frame-title-format "GNU Emacs – %b"
-	      cursor-type 'bar)
+              cursor-type 'bar)
 
 (setq scroll-step 1
       scroll-conservatively 101
@@ -233,8 +237,8 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(ada-mode all-the-icons-dired cmake-mode company elsqlite forth-mode
-	      hl-todo jinx lsp-mode lua-mode magit minimal-dashboard
-	      multiple-cursors rainbow-delimiters vertico yaml)))
+              hl-todo jinx lsp-mode lua-mode magit minimal-dashboard
+              multiple-cursors rainbow-delimiters vertico yaml)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
